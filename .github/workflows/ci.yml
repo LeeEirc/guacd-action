@@ -7,7 +7,7 @@ jobs:
   buildx:
     runs-on: ubuntu-latest
     steps:
-      - uses: git clone guacamole-server
+      - name: git clone guacamole-server
         run: |
           git clone --branch 1.3.0 https://github.com/apache/guacamole-server.git
       - name: Set up QEMU
