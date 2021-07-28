@@ -59,7 +59,6 @@ ARG BUILD_DEPENDENCIES="              \
         libcairo2-dev                 \
         libgcrypt-dev                 \
         libjpeg62-turbo-dev           \
-        libpng12-dev           		  \
         libavcodec-dev 				  \
         libavformat-dev               \
         libavutil-dev	              \
