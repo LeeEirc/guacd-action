@@ -86,5 +86,7 @@ RUN apt-get update                                              && \
 
 RUN git clone --branch 1.3.0 https://github.com/apache/guacamole-server.git "$BUILD_DIR"
 
-RUN cd "$BUILD_DIR" && autoreconf -fi && ./configure --with-init-dir="$PREFIX_DIR" && make && make install
+RUN cd "$BUILD_DIR" && autoreconf -fi && \
+ 	./configure --with-init-dir="$PREFIX_DIR" && \
+ 	make && make install && ldconfig
 
