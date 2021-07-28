@@ -81,7 +81,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Bring build environment up to date and install build dependencies
 RUN apt-get update                                              && \
     apt-get install -t ${DEBIAN_RELEASE} -y $BUILD_DEPENDENCIES git && \
-    apt reinstall libcurl3-gnutls/stable && \
+    apt reinstall -y libcurl3-gnutls/stable && \
     rm -rf /var/lib/apt/lists/*
 
 RUN git clone --branch 1.3.0 https://github.com/apache/guacamole-server.git "$BUILD_DIR"
