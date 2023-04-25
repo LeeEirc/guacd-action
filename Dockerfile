@@ -22,26 +22,11 @@
 #
 
 # The Debian image that should be used as the basis for the guacd image
-ARG DEBIAN_BASE_IMAGE=buster-slim
+ARG DEBIAN_BASE_IMAGE=bullseye-slim
 
 # Use Debian as base for the build
 FROM debian:${DEBIAN_BASE_IMAGE} AS builder
 
-#
-# The Debian repository that should be preferred for dependencies (this will be
-# added to /etc/apt/sources.list if not already present)
-#
-# NOTE: Due to limitations of the Docker image build process, this value is
-# duplicated in an ARG in the second stage of the build.
-#
-ARG DEBIAN_RELEASE=buster-backports
-
-# Add repository for specified Debian release if not already present in
-# sources.list
-RUN grep " ${DEBIAN_RELEASE} " /etc/apt/sources.list || echo >> /etc/apt/sources.list \
-    "deb http://deb.debian.org/debian ${DEBIAN_RELEASE} main contrib non-free"
-
-#
 # Base directory for installed build artifacts.
 #
 # NOTE: Due to limitations of the Docker image build process, this value is
@@ -73,18 +58,19 @@ ARG BUILD_DEPENDENCIES="              \
         libvncserver-dev              \
         libwebsockets-dev             \
         libwebp-dev                   \
+        git                           \
+        ffmpeg                        \
         make"
 
 # Do not require interaction during build
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Bring build environment up to date and install build dependencies
-RUN apt-get update                                              && \
-    apt-get install -t ${DEBIAN_RELEASE} -y $BUILD_DEPENDENCIES git && \
-    apt reinstall --allow-downgrades -y libcurl3-gnutls/stable && \
+RUN apt-get update   && \
+    apt-get install -y $BUILD_DEPENDENCIES git && \
     rm -rf /var/lib/apt/lists/*
 
-RUN git clone --branch 1.3.0 https://github.com/apache/guacamole-server.git "$BUILD_DIR"
+RUN git clone --branch 1.5.1 https://github.com/apache/guacamole-server.git "$BUILD_DIR"
 
 RUN cd "$BUILD_DIR" && autoreconf -fi && \
  	./configure --with-init-dir="$PREFIX_DIR" && \
